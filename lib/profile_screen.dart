@@ -23,25 +23,11 @@ class _ProfileScreenState extends State<ProfileScreen>
     'location': 'Belém, PA',
     'joinDate': '15/03/2022',
     'lastLogin': 'Hoje às 08:30',
-    'eventsManaged': 45,
-    'totalCheckIns': 1240,
   };
-
-  bool _isEditing = false;
-  late TextEditingController _nameController;
-  late TextEditingController _emailController;
-  late TextEditingController _phoneController;
-  late TextEditingController _locationController;
 
   @override
   void initState() {
     super.initState();
-
-    // Inicializar controladores com dados atuais
-    _nameController = TextEditingController(text: _userProfile['name']);
-    _emailController = TextEditingController(text: _userProfile['email']);
-    _phoneController = TextEditingController(text: _userProfile['phone']);
-    _locationController = TextEditingController(text: _userProfile['location']);
 
     // Configurar animações
     _animationController = AnimationController(
@@ -67,135 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _locationController.dispose();
     super.dispose();
-  }
-
-  void _toggleEdit() {
-    setState(() {
-      _isEditing = !_isEditing;
-    });
-
-    if (!_isEditing) {
-      _saveProfile();
-    }
-  }
-
-  void _saveProfile() {
-    setState(() {
-      _userProfile['name'] = _nameController.text;
-      _userProfile['email'] = _emailController.text;
-      _userProfile['phone'] = _phoneController.text;
-      _userProfile['location'] = _locationController.text;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Row(
-          children: [
-            Icon(Icons.check, color: Colors.white),
-            SizedBox(width: 8),
-            Text('Perfil atualizado com sucesso!'),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  void _changePassword() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey.shade900,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Row(
-            children: [
-              Icon(Icons.lock, color: Colors.cyan, size: 28),
-              SizedBox(width: 12),
-              Text(
-                'Alterar Senha',
-                style: TextStyle(
-                  color: Colors.cyan,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildPasswordField('Senha Atual', Icons.lock_outline),
-              const SizedBox(height: 16),
-              _buildPasswordField('Nova Senha', Icons.lock),
-              const SizedBox(height: 16),
-              _buildPasswordField('Confirmar Nova Senha', Icons.lock),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                'Cancelar',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('Senha alterada com sucesso!'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.cyan,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Alterar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildPasswordField(String hint, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
-      ),
-      child: TextField(
-        obscureText: true,
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-          prefixIcon: Icon(icon, color: Colors.cyan),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(16),
-        ),
-      ),
-    );
   }
 
   @override
@@ -246,14 +104,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                       const Spacer(),
-                      IconButton(
-                        onPressed: _toggleEdit,
-                        icon: Icon(
-                          _isEditing ? Icons.save : Icons.edit,
-                          color: Colors.cyan,
-                          size: 28,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -274,10 +124,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
                             // Informações pessoais
                             _buildPersonalInfoSection(),
-                            const SizedBox(height: 20),
-
-                            // Estatísticas
-                            _buildStatsSection(),
                             const SizedBox(height: 20),
 
                             // Ações do perfil
@@ -414,32 +260,20 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
           const SizedBox(height: 20),
 
-          _buildInfoField(
+          _buildReadOnlyField(
             'Nome Completo',
             _userProfile['name'],
             Icons.person,
-            _nameController,
           ),
           const SizedBox(height: 16),
-          _buildInfoField(
-            'E-mail',
-            _userProfile['email'],
-            Icons.email,
-            _emailController,
-          ),
+          _buildReadOnlyField('E-mail', _userProfile['email'], Icons.email),
           const SizedBox(height: 16),
-          _buildInfoField(
-            'Telefone',
-            _userProfile['phone'],
-            Icons.phone,
-            _phoneController,
-          ),
+          _buildReadOnlyField('Telefone', _userProfile['phone'], Icons.phone),
           const SizedBox(height: 16),
-          _buildInfoField(
+          _buildReadOnlyField(
             'Localização',
             _userProfile['location'],
             Icons.location_on,
-            _locationController,
           ),
           const SizedBox(height: 16),
           _buildReadOnlyField(
@@ -461,52 +295,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildInfoField(
-    String label,
-    String value,
-    IconData icon,
-    TextEditingController controller,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: _isEditing
-                ? Colors.black.withOpacity(0.4)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _isEditing
-                  ? Colors.cyan.withOpacity(0.5)
-                  : Colors.white.withOpacity(0.1),
-              width: 1,
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            enabled: _isEditing,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: Colors.cyan, size: 20),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(16),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -548,96 +336,9 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _buildStatsSection() {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildStatCard(
-            'Eventos Gerenciados',
-            _userProfile['eventsManaged'].toString(),
-            Icons.event,
-            Colors.green,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildStatCard(
-            'Total Check-ins',
-            _userProfile['totalCheckIns'].toString(),
-            Icons.check_circle,
-            Colors.blue,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 32),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildActionsSection() {
     return Column(
       children: [
-        _buildActionButton(
-          'Alterar Senha',
-          'Modifique sua senha de acesso',
-          Icons.lock,
-          Colors.orange,
-          _changePassword,
-        ),
-        const SizedBox(height: 12),
-        _buildActionButton(
-          'Notificações',
-          'Configure suas preferências',
-          Icons.notifications,
-          Colors.purple,
-          () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Configurações de notificação'),
-                backgroundColor: Colors.purple,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 12),
         _buildActionButton(
           'Suporte',
           'Entre em contato conosco',

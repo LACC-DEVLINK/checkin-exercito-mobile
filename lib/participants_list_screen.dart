@@ -357,7 +357,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
                             'Todos',
                             'Check-in Realizado',
                             'Pendente',
-                            'Ausente',
+                            'Saída',
                           ].map((filter) {
                             final isSelected = _selectedFilter == filter;
                             return Padding(

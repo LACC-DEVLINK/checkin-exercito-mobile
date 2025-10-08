@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
-import 'register_screen.dart';
-import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +12,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool _offlineMode = false;
 
   void _handleLogin() {
     // Aqui você pode adicionar a lógica de autenticação
@@ -218,88 +215,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Opções adicionais
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Esqueceu a senha
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ForgotPasswordScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Esqueceu da senha?',
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                      ),
-
-                      // Switch Modo Offline
-                      Row(
-                        children: [
-                          const Text(
-                            'Modo Offline',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Switch(
-                            value: _offlineMode,
-                            onChanged: (value) {
-                              setState(() {
-                                _offlineMode = value;
-                              });
-                            },
-                            activeColor: Colors.cyan,
-                            activeTrackColor: Colors.cyan.withOpacity(0.3),
-                            inactiveThumbColor: Colors.white54,
-                            inactiveTrackColor: Colors.white24,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Link para criar conta
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Não tem uma conta? ',
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Criar Conta',
-                          style: TextStyle(
-                            color: Colors.cyan,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
