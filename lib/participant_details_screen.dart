@@ -15,6 +15,8 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
   bool _isCheckingIn = false;
+  bool get _isAlreadyAuthorized =>
+      widget.participantData['access'] == 'Autorizado';
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
       _isCheckingIn = true;
     });
 
-    // Simular processo de check-in
+    // Simular processo de registrar entrada
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         showDialog(
@@ -60,7 +62,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                   Icon(Icons.check_circle, color: Colors.green, size: 32),
                   const SizedBox(width: 12),
                   const Text(
-                    'Sucesso!',
+                    'Entrada Registrada!',
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -68,9 +70,30 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                   ),
                 ],
               ),
-              content: const Text(
-                'Check-in realizado com sucesso!\nParticipante registrado no evento.',
-                style: TextStyle(color: Colors.white70, fontSize: 16),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Entrada registrada com sucesso no evento!',
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Participante: ${widget.participantData['name'] ?? 'N/A'}',
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                  Text(
+                    'Horário: ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  if (_isAlreadyAuthorized &&
+                      widget.participantData['approvedBy'] != null)
+                    Text(
+                      'Autorizado por: ${widget.participantData['approvedBy']}',
+                      style: const TextStyle(color: Colors.green, fontSize: 12),
+                    ),
+                ],
               ),
               actions: [
                 TextButton(
@@ -96,6 +119,16 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
 
   void _cancelCheckIn() {
     Navigator.of(context).pop();
+  }
+
+  String _formatTimestamp(String? timestamp) {
+    if (timestamp == null) return '';
+    try {
+      final dateTime = DateTime.parse(timestamp);
+      return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    } catch (e) {
+      return timestamp;
+    }
   }
 
   @override
@@ -155,42 +188,61 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
 
                   const Spacer(),
 
-                  // Card do Participante
+                  // Status de Autorização
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 32),
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
+                      color: _isAlreadyAuthorized
+                          ? Colors.green.withOpacity(0.2)
+                          : Colors.black.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                        width: 1,
+                        color: _isAlreadyAuthorized
+                            ? Colors.green.withOpacity(0.5)
+                            : Colors.white.withOpacity(0.2),
+                        width: 2,
                       ),
                     ),
                     child: Column(
                       children: [
-                        // Foto do participante
+                        // Ícone de Status
                         Container(
-                          width: 120,
-                          height: 120,
+                          width: 80,
+                          height: 80,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.green, width: 3),
+                            shape: BoxShape.circle,
+                            color: _isAlreadyAuthorized
+                                ? Colors.green
+                                : Colors.orange,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(9),
-                            child: Container(
-                              color: Colors.grey.shade300,
-                              child: Icon(
-                                Icons.person,
-                                size: 80,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
+                          child: Icon(
+                            _isAlreadyAuthorized
+                                ? Icons.check_circle
+                                : Icons.access_time,
+                            size: 40,
+                            color: Colors.white,
                           ),
                         ),
 
                         const SizedBox(height: 20),
+
+                        // Status
+                        Text(
+                          _isAlreadyAuthorized
+                              ? 'ACESSO AUTORIZADO'
+                              : 'AGUARDANDO AUTORIZAÇÃO',
+                          style: TextStyle(
+                            color: _isAlreadyAuthorized
+                                ? Colors.green
+                                : Colors.orange,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
 
                         // Nome do participante
                         Text(
@@ -202,53 +254,80 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                           ),
                         ),
 
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8),
 
-                        // Nível de acesso
+                        // ID do participante
                         Text(
-                          'Nível de Acesso: ${widget.participantData['access'] ?? 'Autoridade'}',
+                          'ID: ${widget.participantData['id'] ?? '12345'}',
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                         ),
 
+                        const SizedBox(height: 16),
+
+                        // Informações de autorização (se autorizado)
+                        if (_isAlreadyAuthorized) ...[
+                          Divider(color: Colors.white.withOpacity(0.3)),
+                          const SizedBox(height: 16),
+
+                          if (widget.participantData['approvedBy'] != null)
+                            Text(
+                              'Autorizado por: ${widget.participantData['approvedBy']}',
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                              ),
+                            ),
+
+                          if (widget.participantData['timestamp'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                'Horário: ${_formatTimestamp(widget.participantData['timestamp'])}',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                        ],
+
                         const SizedBox(height: 20),
 
-                        // Status
+                        // Evento
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
-                            vertical: 8,
+                            vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.green, width: 1),
+                            color: Colors.cyan.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.cyan.withOpacity(0.5),
+                              width: 1,
+                            ),
                           ),
                           child: Row(
-                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                'Status: ',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const Text(
-                                'CHECK-IN REALIZADO',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              const Icon(
+                                Icons.event,
+                                color: Colors.cyan,
+                                size: 18,
                               ),
                               const SizedBox(width: 8),
-                              const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 18,
+                              Expanded(
+                                child: Text(
+                                  widget.participantData['event'] ??
+                                      'Evento Militar - FortAccess',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -264,67 +343,111 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: Column(
                       children: [
-                        // Botão Confirmar Check-in
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: _isCheckingIn ? null : _confirmCheckIn,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                        if (_isAlreadyAuthorized) ...[
+                          // Botão Registrar Entrada (se autorizado)
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: _isCheckingIn ? null : _confirmCheckIn,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                elevation: 4,
                               ),
-                              elevation: 4,
-                            ),
-                            child: _isCheckingIn
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                Colors.white,
-                                              ),
+                              child: _isCheckingIn
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      const Text(
-                                        'PROCESSANDO...',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.2,
+                                        const SizedBox(width: 12),
+                                        const Text(
+                                          'REGISTRANDO ENTRADA...',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1.2,
+                                          ),
                                         ),
+                                      ],
+                                    )
+                                  : const Text(
+                                      'REGISTRAR ENTRADA NO EVENTO',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
                                       ),
-                                    ],
-                                  )
-                                : const Text(
-                                    'CONFIRMAR CHECK-IN',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.2,
                                     ),
-                                  ),
+                            ),
                           ),
-                        ),
+                        ] else ...[
+                          // Mensagem se não autorizado
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.orange.withOpacity(0.5),
+                                width: 1,
+                              ),
+                            ),
+                            child: const Column(
+                              children: [
+                                Icon(
+                                  Icons.info_outline,
+                                  color: Colors.orange,
+                                  size: 24,
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Aguardando autorização da central',
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'O administrador precisa aprovar este acesso',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
 
                         const SizedBox(height: 16),
 
-                        // Botão Cancelar
+                        // Botão Voltar
                         SizedBox(
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
                             onPressed: _isCheckingIn ? null : _cancelCheckIn,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey.shade600,
+                              backgroundColor: Colors.grey.shade700,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
@@ -332,7 +455,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                               elevation: 2,
                             ),
                             child: const Text(
-                              'CANCELAR',
+                              'VOLTAR AO SCANNER',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
