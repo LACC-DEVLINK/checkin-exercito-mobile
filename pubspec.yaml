@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   
   # QR Code functionality
-  qr_code_scanner: ^1.0.1
+  mobile_scanner: ^5.0.0
   qr_flutter: ^4.1.0
   
   # Charts and graphics
