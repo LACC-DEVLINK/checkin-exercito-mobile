@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'awaiting_authorization_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class _QRScannerScreenState extends State<QRScannerScreen>
     with TickerProviderStateMixin {
   late AnimationController _scanLineController;
   late Animation<double> _scanLineAnimation;
+  MobileScannerController? _scannerController;
   bool _isScanning = true;
 
   @override
@@ -31,46 +33,59 @@ class _QRScannerScreenState extends State<QRScannerScreen>
 
     _scanLineController.repeat();
 
-    // Simular resultado do scan após 3 segundos
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        _simulateScanResult();
-      }
-    });
+    // Inicializar o controller da câmera
+    _initializeScanner();
+  }
+
+  void _initializeScanner() {
+    _scannerController = MobileScannerController(
+      facing: CameraFacing.back,
+      torchEnabled: false,
+    );
   }
 
   @override
   void dispose() {
     _scanLineController.dispose();
+    _scannerController?.dispose();
     super.dispose();
   }
 
-  void _simulateScanResult() {
-    setState(() {
-      _isScanning = false;
-    });
-    _scanLineController.stop();
-    HapticFeedback.lightImpact();
+  void _onDetect(BarcodeCapture barcodeCapture) {
+    final List<Barcode> barcodes = barcodeCapture.barcodes;
+    
+    if (barcodes.isNotEmpty && _isScanning) {
+      setState(() {
+        _isScanning = false;
+      });
+      
+      _scanLineController.stop();
+      HapticFeedback.lightImpact();
 
-    // Simular dados escaneados do QR Code
-    final scannedData = {
-      'qrCode': 'QR${DateTime.now().millisecondsSinceEpoch}',
-      'participantId': '12345',
-      'name': 'Rafael Lindo',
-      'event': 'Evento Militar - FortAccess',
-    };
+      final barcode = barcodes.first;
+      final qrData = barcode.rawValue ?? '';
 
-    // Navegar para tela de aguardando autorização
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            AwaitingAuthorizationScreen(scannedData: scannedData),
-      ),
-    ).then((_) {
-      // Quando voltar, reiniciar o scanner
-      _restartScan();
-    });
+      // Criar dados do participante baseado no QR Code escaneado
+      final scannedData = {
+        'qrCode': qrData,
+        'participantId': qrData.isNotEmpty ? qrData : '12345',
+        'name': 'Rafael Lindo',
+        'event': 'Evento Militar - FortAccess',
+        'scanTime': DateTime.now().toString(),
+      };
+
+      // Navegar para tela de aguardando autorização
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              AwaitingAuthorizationScreen(scannedData: scannedData),
+        ),
+      ).then((_) {
+        // Quando voltar, reiniciar o scanner
+        _restartScan();
+      });
+    }
   }
 
   void _restartScan() {
@@ -78,13 +93,10 @@ class _QRScannerScreenState extends State<QRScannerScreen>
       _isScanning = true;
     });
     _scanLineController.repeat();
+  }
 
-    // Simular novo resultado
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted && _isScanning) {
-        _simulateScanResult();
-      }
-    });
+  void _toggleFlash() {
+    _scannerController?.toggleTorch();
   }
 
   void _goBack() {
@@ -154,13 +166,30 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                     height: 280,
                     child: Stack(
                       children: [
-                        // Fundo semi-transparente
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.3),
+                        // Câmera dentro do container
+                        if (_scannerController != null && _isScanning)
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(20),
+                            child: MobileScanner(
+                              controller: _scannerController,
+                              onDetect: _onDetect,
+                            ),
+                          )
+                        else
+                          // Fundo quando não está escaneando
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.qr_code_scanner,
+                                color: Colors.white54,
+                                size: 60,
+                              ),
+                            ),
                           ),
-                        ),
 
                         // Cantos do scanner
                         Positioned(
@@ -271,7 +300,7 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 24),
                   child: ElevatedButton.icon(
-                    onPressed: _isScanning ? null : _restartScan,
+                    onPressed: _isScanning ? _toggleFlash : _restartScan,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.cyan,
                       foregroundColor: Colors.white,
@@ -282,11 +311,11 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                       elevation: 4,
                     ),
                     icon: Icon(
-                      _isScanning ? Icons.search : Icons.refresh,
+                      _isScanning ? Icons.flash_on : Icons.refresh,
                       size: 20,
                     ),
                     label: Text(
-                      _isScanning ? 'FOCAR E ESCANEAR' : 'ESCANEAR NOVAMENTE',
+                      _isScanning ? 'ATIVAR FLASH' : 'ESCANEAR NOVAMENTE',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
