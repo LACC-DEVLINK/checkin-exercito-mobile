@@ -48,6 +48,12 @@ dependencies:
   # Local storage
   shared_preferences: ^2.2.2
   
+  # WebSocket for real-time communication
+  web_socket_channel: ^2.4.5
+  
+  # UUID generator
+  uuid: ^4.3.3
+  
   # Image picker
   image_picker: ^1.0.7
   

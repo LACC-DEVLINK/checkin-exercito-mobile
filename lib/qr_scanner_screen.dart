@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'participant_details_screen.dart';
+import 'awaiting_authorization_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -52,20 +52,25 @@ class _QRScannerScreenState extends State<QRScannerScreen>
     _scanLineController.stop();
     HapticFeedback.lightImpact();
 
-    // Navegar para tela de detalhes do participante
+    // Simular dados escaneados do QR Code
+    final scannedData = {
+      'qrCode': 'QR${DateTime.now().millisecondsSinceEpoch}',
+      'participantId': '12345',
+      'name': 'Rafael Lindo',
+      'event': 'Evento Militar - FortAccess',
+    };
+
+    // Navegar para tela de aguardando autorização
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ParticipantDetailsScreen(
-          participantData: {
-            'name': 'Rafael Lindo',
-            'id': '12345',
-            'event': 'COP 30',
-            'access': 'Autoridade',
-          },
-        ),
+        builder: (context) =>
+            AwaitingAuthorizationScreen(scannedData: scannedData),
       ),
-    );
+    ).then((_) {
+      // Quando voltar, reiniciar o scanner
+      _restartScan();
+    });
   }
 
   void _restartScan() {
