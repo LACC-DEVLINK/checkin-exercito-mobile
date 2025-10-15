@@ -16,8 +16,8 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
   final List<Map<String, dynamic>> _allParticipants = [
     {
       'id': '001',
-      'name': 'João Silva',
-      'email': 'joao.silva@email.com',
+      'name': 'Rafael Góes',
+      'email': 'rafaelgoes@email.com',
       'accessLevel': 'Autoridade',
       'status': 'Check-in Realizado',
       'checkinTime': '08:30',
@@ -26,8 +26,8 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
     },
     {
       'id': '002',
-      'name': 'Maria Santos',
-      'email': 'maria.santos@email.com',
+      'name': 'Erminio Apaixonado',
+      'email': 'erminioapaixonado@email.com',
       'accessLevel': 'Delegado',
       'status': 'Pendente',
       'checkinTime': '--:--',
