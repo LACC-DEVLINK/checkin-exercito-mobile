@@ -19,7 +19,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       return;
     }
 
-    if (!_emailController.text.contains('@')) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(_emailController.text)) {
       _showMessage('Por favor, digite um e-mail válido', Colors.red);
       return;
     }
@@ -40,9 +41,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   void _showMessage(String message, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
+    );
+  }
+
+  Widget _buildLoadingRow(String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ],
+    );
   }
 
   void _resendEmail() {
@@ -109,7 +135,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ),
                       const Spacer(),
-                      const SizedBox(width: 48),
                     ],
                   ),
 
@@ -122,23 +147,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       height: 80,
                       margin: const EdgeInsets.only(bottom: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        gradient: LinearGradient(
+                          colors: [Colors.blue.shade800, Colors.cyan],
+                        ),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.blue.shade800, Colors.cyan],
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.lock_reset,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
+                      child: const Icon(
+                        Icons.lock_reset,
+                        size: 40,
+                        color: Colors.white,
                       ),
                     ),
 
@@ -219,30 +236,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           elevation: 4,
                         ),
                         child: _isLoading
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text(
-                                    'ENVIANDO...',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.2,
-                                    ),
-                                  ),
-                                ],
-                              )
+                            ? _buildLoadingRow('ENVIANDO...')
                             : const Text(
                                 'RECUPERAR SENHA',
                                 style: TextStyle(
@@ -322,30 +316,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           elevation: 4,
                         ),
                         child: _isLoading
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text(
-                                    'REENVIANDO...',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.2,
-                                    ),
-                                  ),
-                                ],
-                              )
+                            ? _buildLoadingRow('REENVIANDO...')
                             : const Text(
                                 'REENVIAR E-MAIL',
                                 style: TextStyle(
