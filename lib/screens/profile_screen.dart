@@ -20,9 +20,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     'role': 'Administrador do Sistema',
     'department': 'Tecnologia da Informação',
     'phone': '+55 91 98608-3776',
-    'location': 'Belém, PA',
-    'joinDate': '15/03/2022',
-    'lastLogin': 'Hoje às 08:30',
   };
 
   @override
@@ -269,30 +266,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           _buildReadOnlyField('E-mail', _userProfile['email'], Icons.email),
           const SizedBox(height: 16),
           _buildReadOnlyField('Telefone', _userProfile['phone'], Icons.phone),
-          const SizedBox(height: 16),
-          _buildReadOnlyField(
-            'Localização',
-            _userProfile['location'],
-            Icons.location_on,
-          ),
-          const SizedBox(height: 16),
-          _buildReadOnlyField(
-            'Departamento',
-            _userProfile['department'],
-            Icons.business,
-          ),
-          const SizedBox(height: 16),
-          _buildReadOnlyField(
-            'Data de Cadastro',
-            _userProfile['joinDate'],
-            Icons.calendar_today,
-          ),
-          const SizedBox(height: 16),
-          _buildReadOnlyField(
-            'Último Acesso',
-            _userProfile['lastLogin'],
-            Icons.access_time,
-          ),
         ],
       ),
     );
