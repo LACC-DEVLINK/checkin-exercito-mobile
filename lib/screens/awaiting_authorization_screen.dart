@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'services/mock_authorization_service.dart';
-import 'services/websocket_service.dart';
+import '../utils/mock_authorization_service.dart';
+import '../utils/websocket_service.dart';
 import 'participant_details_screen.dart';
 
 class AwaitingAuthorizationScreen extends StatefulWidget {
