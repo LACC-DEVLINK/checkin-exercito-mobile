@@ -16,15 +16,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
     // Navegar para diferentes telas baseado no índice
     switch (index) {
-      case 0:
-        // Dashboard - já estamos aqui
-        break;
       case 1:
         _showReports();
         break;
@@ -32,6 +25,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _showProfile();
         break;
     }
+    
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   void _showQRScanner() {
@@ -103,23 +100,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     height: 80,
                     margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      gradient: LinearGradient(
+                        colors: [Colors.blue.shade800, Colors.cyan],
+                      ),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.blue.shade800, Colors.cyan],
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.security,
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                      ),
+                    child: const Icon(
+                      Icons.security,
+                      size: 40,
+                      color: Colors.white,
                     ),
                   ),
 
@@ -212,37 +201,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       // Lista Participantes
                       Expanded(
-                        child: Container(
-                          height: 80,
-                          margin: const EdgeInsets.only(right: 8),
-                          child: ElevatedButton(
-                            onPressed: _showParticipantsList,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white.withOpacity(0.15),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                side: BorderSide(
-                                  color: Colors.white.withOpacity(0.3),
-                                  width: 1,
-                                ),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.group, size: 24),
-                                SizedBox(height: 4),
-                                Text(
-                                  'LISTA\nPARTICIPANTES',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: _showParticipantsList,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white.withOpacity(0.15),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 1,
                                   ),
                                 ),
-                              ],
+                                elevation: 0,
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.group, size: 24),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'LISTA\nPARTICIPANTES',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -250,37 +241,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                       // Configurações
                       Expanded(
-                        child: Container(
-                          height: 80,
-                          margin: const EdgeInsets.only(left: 8),
-                          child: ElevatedButton(
-                            onPressed: _showSettings,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white.withOpacity(0.15),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                side: BorderSide(
-                                  color: Colors.white.withOpacity(0.3),
-                                  width: 1,
-                                ),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.settings, size: 24),
-                                SizedBox(height: 4),
-                                Text(
-                                  'CONFIGURAÇÕES',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: SizedBox(
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: _showSettings,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white.withOpacity(0.15),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 1,
                                   ),
                                 ),
-                              ],
+                                elevation: 0,
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.settings, size: 24),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'CONFIGURAÇÕES',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -297,36 +290,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
 
       // Bottom Navigation Bar
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          border: Border(
-            top: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
           ),
-        ),
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.assessment),
-              label: 'Relatórios',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Meu Perfil',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.cyan,
-          unselectedItemColor: Colors.white54,
-          backgroundColor: Colors.transparent,
-          type: BottomNavigationBarType.fixed,
-          elevation: 0,
-          onTap: _onItemTapped,
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assessment),
+            label: 'Relatórios',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Meu Perfil',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.cyan,
+        unselectedItemColor: Colors.white54,
+        backgroundColor: Colors.black.withOpacity(0.8),
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+        onTap: _onItemTapped,
       ),
     );
   }
