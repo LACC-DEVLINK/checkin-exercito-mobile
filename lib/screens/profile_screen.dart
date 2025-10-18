@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -59,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -69,8 +70,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -160,13 +161,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
-                    colors: [Colors.cyan, Colors.blue.shade600],
+                    colors: [AppColors.lightGreen, AppColors.secondaryGreen],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.cyan.withOpacity(0.3),
+                      color: AppColors.lightGreen.withOpacity(0.3),
                       blurRadius: 15,
                       spreadRadius: 2,
                     ),
@@ -181,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: Colors.cyan,
+                    color: AppColors.lightGreen,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.black, width: 2),
                   ),
@@ -211,14 +212,14 @@ class _ProfileScreenState extends State<ProfileScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.cyan.withOpacity(0.2),
+              color: AppColors.lightGreen.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.cyan, width: 1),
+              border: Border.all(color: AppColors.lightGreen, width: 1),
             ),
             child: Text(
               _userProfile['role'],
               style: const TextStyle(
-                color: Colors.cyan,
+                color: AppColors.lightGreen,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -243,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           const Row(
             children: [
-              Icon(Icons.person_outline, color: Colors.cyan, size: 24),
+              Icon(Icons.person_outline, color: AppColors.lightGreen, size: 24),
               SizedBox(width: 8),
               Text(
                 'Informações Pessoais',
@@ -316,12 +317,12 @@ class _ProfileScreenState extends State<ProfileScreen>
           'Suporte',
           'Entre em contato conosco',
           Icons.help,
-          Colors.cyan,
+          AppColors.lightGreen,
           () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Redirecionando para suporte...'),
-                backgroundColor: Colors.cyan,
+                backgroundColor: AppColors.lightGreen,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
