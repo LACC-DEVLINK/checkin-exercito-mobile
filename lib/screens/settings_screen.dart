@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -24,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: 40,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.blue.shade800, Colors.cyan],
+                    colors: [AppColors.primaryGreen, AppColors.lightGreen],
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -47,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Sistema Check-in COP 30',
                 style: TextStyle(
-                  color: Colors.cyan,
+                  color: AppColors.lightGreen,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -68,7 +69,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Fechar', style: TextStyle(color: Colors.cyan)),
+              child: const Text(
+                'Fechar',
+                style: TextStyle(color: AppColors.lightGreen),
+              ),
             ),
           ],
         );
@@ -91,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -101,8 +105,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -137,7 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onPressed: _exportSettings,
                         icon: const Icon(
                           Icons.download,
-                          color: Colors.cyan,
+                          color: AppColors.lightGreen,
                           size: 28,
                         ),
                       ),
@@ -157,7 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           'Sobre o Aplicativo',
                           'Informações da versão e desenvolvedor',
                           Icons.info_outline,
-                          Colors.cyan,
+                          AppColors.lightGreen,
                           _showAbout,
                         ),
                         _buildActionTile(
@@ -191,7 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Text(
         title.toUpperCase(),
         style: const TextStyle(
-          color: Colors.cyan,
+          color: AppColors.lightGreen,
           fontSize: 14,
           fontWeight: FontWeight.bold,
           letterSpacing: 1,
