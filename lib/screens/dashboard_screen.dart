@@ -4,6 +4,7 @@ import 'participants_list_screen.dart';
 import 'settings_screen.dart';
 import 'reports_screen.dart';
 import 'profile_screen.dart';
+import '../utils/app_colors.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -25,7 +26,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _showProfile();
         break;
     }
-    
+
     setState(() {
       _selectedIndex = index;
     });
@@ -72,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -82,8 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.6),
-                Colors.black.withOpacity(0.8),
+                Colors.black.withOpacity(0.3),
+                Colors.black.withOpacity(0.4),
               ],
             ),
           ),
@@ -96,19 +97,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // Logo e Título
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 120,
+                    height: 120,
                     margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade800, Colors.cyan],
-                      ),
                       borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                    child: const Icon(
-                      Icons.security,
-                      size: 40,
-                      color: Colors.white,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/images/logo-do-app.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.security,
+                            size: 60,
+                            color: AppColors.lightGreen,
+                          );
+                        },
+                      ),
                     ),
                   ),
 
@@ -176,7 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: ElevatedButton(
                       onPressed: _showQRScanner,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyan,
+                        backgroundColor: AppColors.lightGreen,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
@@ -306,7 +320,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan,
+        selectedItemColor: AppColors.lightGreen,
         unselectedItemColor: Colors.white54,
         backgroundColor: Colors.black.withOpacity(0.8),
         type: BottomNavigationBarType.fixed,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'awaiting_authorization_screen.dart';
@@ -53,12 +54,12 @@ class _QRScannerScreenState extends State<QRScannerScreen>
 
   void _onDetect(BarcodeCapture barcodeCapture) {
     final List<Barcode> barcodes = barcodeCapture.barcodes;
-    
+
     if (barcodes.isNotEmpty && _isScanning) {
       setState(() {
         _isScanning = false;
       });
-      
+
       _scanLineController.stop();
       HapticFeedback.lightImpact();
 
@@ -109,7 +110,7 @@ class _QRScannerScreenState extends State<QRScannerScreen>
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -119,8 +120,8 @@ class _QRScannerScreenState extends State<QRScannerScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -200,8 +201,14 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                             height: 40,
                             decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.cyan, width: 4),
-                                left: BorderSide(color: Colors.cyan, width: 4),
+                                top: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
+                                left: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
                               ),
                             ),
                           ),
@@ -214,8 +221,14 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                             height: 40,
                             decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.cyan, width: 4),
-                                right: BorderSide(color: Colors.cyan, width: 4),
+                                top: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
+                                right: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
                               ),
                             ),
                           ),
@@ -229,10 +242,13 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  color: Colors.cyan,
+                                  color: AppColors.lightGreen,
                                   width: 4,
                                 ),
-                                left: BorderSide(color: Colors.cyan, width: 4),
+                                left: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
                               ),
                             ),
                           ),
@@ -246,10 +262,13 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  color: Colors.cyan,
+                                  color: AppColors.lightGreen,
                                   width: 4,
                                 ),
-                                right: BorderSide(color: Colors.cyan, width: 4),
+                                right: BorderSide(
+                                  color: AppColors.lightGreen,
+                                  width: 4,
+                                ),
                               ),
                             ),
                           ),
@@ -270,15 +289,17 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                                     gradient: LinearGradient(
                                       colors: [
                                         Colors.transparent,
-                                        Colors.cyan,
-                                        Colors.cyan.withOpacity(0.8),
-                                        Colors.cyan,
+                                        AppColors.lightGreen,
+                                        AppColors.lightGreen.withOpacity(0.8),
+                                        AppColors.lightGreen,
                                         Colors.transparent,
                                       ],
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.cyan.withOpacity(0.5),
+                                        color: AppColors.lightGreen.withOpacity(
+                                          0.5,
+                                        ),
                                         blurRadius: 4,
                                         spreadRadius: 1,
                                       ),
@@ -302,7 +323,7 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                   child: ElevatedButton.icon(
                     onPressed: _isScanning ? _toggleFlash : _restartScan,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyan,
+                      backgroundColor: AppColors.lightGreen,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -358,7 +379,9 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                         children: [
                           Icon(
                             _isScanning ? Icons.search : Icons.check_circle,
-                            color: _isScanning ? Colors.cyan : Colors.green,
+                            color: _isScanning
+                                ? AppColors.lightGreen
+                                : Colors.green,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -367,7 +390,9 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                                 ? 'Procurando QR Code...'
                                 : 'QR Code detectado!',
                             style: TextStyle(
-                              color: _isScanning ? Colors.cyan : Colors.green,
+                              color: _isScanning
+                                  ? AppColors.lightGreen
+                                  : Colors.green,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -407,7 +432,7 @@ class _QRScannerScreenState extends State<QRScannerScreen>
                       ),
                     ],
                     currentIndex: 0,
-                    selectedItemColor: Colors.cyan,
+                    selectedItemColor: AppColors.lightGreen,
                     unselectedItemColor: Colors.white54,
                     backgroundColor: Colors.transparent,
                     type: BottomNavigationBarType.fixed,

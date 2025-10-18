@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class ParticipantsListScreen extends StatefulWidget {
   const ParticipantsListScreen({super.key});
@@ -74,7 +75,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundColor: Colors.cyan,
+                backgroundColor: AppColors.lightGreen,
                 child: Icon(participant['avatar'], color: Colors.white),
               ),
               const SizedBox(width: 12),
@@ -107,7 +108,10 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Fechar', style: TextStyle(color: Colors.cyan)),
+              child: const Text(
+                'Fechar',
+                style: TextStyle(color: AppColors.lightGreen),
+              ),
             ),
           ],
         );
@@ -151,7 +155,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -161,8 +165,8 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -206,7 +210,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
                         },
                         icon: const Icon(
                           Icons.refresh,
-                          color: Colors.cyan,
+                          color: AppColors.lightGreen,
                           size: 28,
                         ),
                       ),
@@ -232,7 +236,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
                       _buildStatCard(
                         'Total',
                         _totalParticipants.toString(),
-                        Colors.cyan,
+                        AppColors.lightGreen,
                       ),
                       _buildStatCard(
                         'Check-in',
@@ -339,10 +343,10 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
                                   });
                                 },
                                 backgroundColor: Colors.white.withOpacity(0.1),
-                                selectedColor: Colors.cyan,
+                                selectedColor: AppColors.lightGreen,
                                 side: BorderSide(
                                   color: isSelected
-                                      ? Colors.cyan
+                                      ? AppColors.lightGreen
                                       : Colors.white.withOpacity(0.3),
                                 ),
                               ),
@@ -483,7 +487,7 @@ class _ParticipantsListScreenState extends State<ParticipantsListScreen> {
                   Text(
                     participant['checkinTime'],
                     style: const TextStyle(
-                      color: Colors.cyan,
+                      color: AppColors.lightGreen,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -38,7 +39,7 @@ class _ReportsScreenState extends State<ReportsScreen>
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -48,8 +49,8 @@ class _ReportsScreenState extends State<ReportsScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -107,10 +108,13 @@ class _ReportsScreenState extends State<ReportsScreen>
                       });
                     },
                     dropdownColor: Colors.grey.shade800,
-                    style: const TextStyle(color: Colors.cyan),
+                    style: const TextStyle(color: AppColors.lightGreen),
                     underline: Container(),
                     isExpanded: true,
-                    icon: const Icon(Icons.expand_more, color: Colors.cyan),
+                    icon: const Icon(
+                      Icons.expand_more,
+                      color: AppColors.lightGreen,
+                    ),
                     items: ['Hoje', 'Esta Semana', 'Este Mês'].map((
                       String period,
                     ) {
@@ -120,7 +124,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                           children: [
                             Icon(
                               Icons.calendar_today,
-                              color: Colors.cyan,
+                              color: AppColors.lightGreen,
                               size: 20,
                             ),
                             const SizedBox(width: 8),
@@ -160,7 +164,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                   'Total',
                   _reportData['totalParticipants'].toString(),
                   Icons.people,
-                  Colors.cyan,
+                  AppColors.lightGreen,
                 ),
               ),
               const SizedBox(width: 12),

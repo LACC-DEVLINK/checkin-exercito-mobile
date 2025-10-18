@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'dart:async';
+import 'screens/dashboard_screen.dart';
+import 'utils/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -66,11 +68,11 @@ class _SplashScreenState extends State<SplashScreen>
     // Iniciar animação
     _controller.forward();
 
-    // Navegar para a tela principal após 3 segundos
-    Future.delayed(const Duration(seconds: 3), () {
+    // Redirecionar para o dashboard após 3 segundos
+    Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
         );
       }
     });
@@ -90,7 +92,7 @@ class _SplashScreenState extends State<SplashScreen>
           // Fundo da imagem
           Positioned.fill(
             child: Image.asset(
-              'assets/images/imagcapa.jpeg',
+              'assets/images/img-da-tela-inical-carregamento.jpeg',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 print('Erro ao carregar imagem: $error');
@@ -113,8 +115,8 @@ class _SplashScreenState extends State<SplashScreen>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.4),
-                  Colors.black.withOpacity(0.7),
+                  Colors.black.withOpacity(0.1),
+                  Colors.black.withOpacity(0.2),
                 ],
               ),
             ),
@@ -124,32 +126,11 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo ou ícone do app (opcional)
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.cyan.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.cyan.withOpacity(0.5),
-                            blurRadius: 20,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.eco,
-                        size: 40,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-
                     // Indicador de carregamento
                     const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.cyan),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.lightGreen,
+                      ),
                       strokeWidth: 3,
                     ),
                     const SizedBox(height: 20),
