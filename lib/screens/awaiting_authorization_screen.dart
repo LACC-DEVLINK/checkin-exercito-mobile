@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 import 'dart:async';
 import '../utils/mock_authorization_service.dart';
 import '../utils/websocket_service.dart';
@@ -220,7 +221,7 @@ class _AwaitingAuthorizationScreenState
               child: const Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.cyan,
+                  color: AppColors.lightGreen,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -270,7 +271,7 @@ class _AwaitingAuthorizationScreenState
               child: const Text(
                 'Tentar Novamente',
                 style: TextStyle(
-                  color: Colors.cyan,
+                  color: AppColors.lightGreen,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -295,7 +296,7 @@ class _AwaitingAuthorizationScreenState
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -305,8 +306,8 @@ class _AwaitingAuthorizationScreenState
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
