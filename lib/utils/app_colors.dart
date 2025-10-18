@@ -6,6 +6,7 @@ class AppColors {
   static const Color primaryGreen = Color(0xFF2D5016); // Verde escuro
   static const Color secondaryGreen = Color(0xFF4A7C2C); // Verde médio
   static const Color lightGreen = Color(0xFF6B9D3E); // Verde claro
+  static const Color armyGreen = primaryGreen;
 
   // Dourado/Amarelo do Exército
   static const Color gold = Color(0xFFD4AF37); // Dourado

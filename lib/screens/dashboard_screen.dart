@@ -150,36 +150,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Spacer(),
 
                   // QR Code Scanner Area
-                  Container(
-                    width: 120,
-                    height: 120,
-                    margin: const EdgeInsets.symmetric(vertical: 30),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
-                        width: 2,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.qr_code_scanner,
-                          size: 60,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'QR CODE',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 40),
+                    child: Center(
+                      child: Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: AppColors.primaryGreen,
+                            width: 5,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primaryGreen.withOpacity(0.5),
+                              blurRadius: 18,
+                              spreadRadius: 4,
+                            ),
+                          ],
                         ),
-                      ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.qr_code_scanner,
+                              size: 70,
+                              color: AppColors.primaryGreen,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'QR CODE',
+                              style: TextStyle(
+                                color: AppColors.primaryGreen,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
 

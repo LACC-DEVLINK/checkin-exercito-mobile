@@ -118,22 +118,9 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
     });
   }
 
-  void _cancelCheckIn() {
-    Navigator.of(context).pop();
-  }
-
-  String _formatTimestamp(String? timestamp) {
-    if (timestamp == null) return '';
-    try {
-      final dateTime = DateTime.parse(timestamp);
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
-    } catch (e) {
-      return timestamp;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final data = widget.participantData;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -148,369 +135,90 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.4),
-                Colors.black.withOpacity(0.5),
+                Colors.black.withOpacity(0.6),
+                Colors.black.withOpacity(0.8),
               ],
             ),
           ),
           child: SafeArea(
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                children: [
-                  // Header
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: _cancelCheckIn,
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'DETALHES DO PARTICIPANTE',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                        const Spacer(),
-                        const SizedBox(width: 48),
-                      ],
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // Status de Autorização
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 32),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: _isAlreadyAuthorized
-                          ? Colors.green.withOpacity(0.2)
-                          : Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: _isAlreadyAuthorized
-                            ? Colors.green.withOpacity(0.5)
-                            : Colors.white.withOpacity(0.2),
-                        width: 2,
+            child: Center(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Foto do militar
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage(
+                        data['photo'] ?? 'assets/images/logo-do-app.png',
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        // Ícone de Status
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _isAlreadyAuthorized
-                                ? Colors.green
-                                : Colors.orange,
-                          ),
-                          child: Icon(
-                            _isAlreadyAuthorized
-                                ? Icons.check_circle
-                                : Icons.access_time,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Status
-                        Text(
-                          _isAlreadyAuthorized
-                              ? 'ACESSO AUTORIZADO'
-                              : 'AGUARDANDO AUTORIZAÇÃO',
-                          style: TextStyle(
-                            color: _isAlreadyAuthorized
-                                ? Colors.green
-                                : Colors.orange,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Nome do participante
-                        Text(
-                          widget.participantData['name'] ?? 'João Silva',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // ID do participante
-                        Text(
-                          'ID: ${widget.participantData['id'] ?? '12345'}',
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Informações de autorização (se autorizado)
-                        if (_isAlreadyAuthorized) ...[
-                          Divider(color: Colors.white.withOpacity(0.3)),
-                          const SizedBox(height: 16),
-
-                          if (widget.participantData['approvedBy'] != null)
-                            Text(
-                              'Autorizado por: ${widget.participantData['approvedBy']}',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
-                              ),
-                            ),
-
-                          if (widget.participantData['timestamp'] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Text(
-                                'Horário: ${_formatTimestamp(widget.participantData['timestamp'])}',
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                        ],
-
-                        const SizedBox(height: 20),
-
-                        // Evento
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.lightGreen.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.lightGreen.withOpacity(0.5),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.event,
-                                color: AppColors.lightGreen,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  widget.participantData['event'] ??
-                                      'Evento Militar - FortAccess',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Botões de ação
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Column(
-                      children: [
-                        if (_isAlreadyAuthorized) ...[
-                          // Botão Registrar Entrada (se autorizado)
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: _isCheckingIn ? null : _confirmCheckIn,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                elevation: 4,
-                              ),
-                              child: _isCheckingIn
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Colors.white,
-                                                ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        const Text(
-                                          'REGISTRANDO ENTRADA...',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.2,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : const Text(
-                                      'REGISTRAR ENTRADA NO EVENTO',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.2,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        ] else ...[
-                          // Mensagem se não autorizado
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.orange.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.orange.withOpacity(0.5),
-                                width: 1,
-                              ),
-                            ),
-                            child: const Column(
-                              children: [
-                                Icon(
-                                  Icons.info_outline,
-                                  color: Colors.orange,
-                                  size: 24,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Aguardando autorização da central',
-                                  style: TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  'O administrador precisa aprovar este acesso',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-
-                        const SizedBox(height: 16),
-
-                        // Botão Voltar
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: _isCheckingIn ? null : _cancelCheckIn,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey.shade700,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              elevation: 2,
-                            ),
-                            child: const Text(
-                              'VOLTAR AO SCANNER',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // Bottom Navigation Bar
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
-                          width: 1,
-                        ),
+                    const SizedBox(height: 20),
+                    // Nome
+                    Text(
+                      data['name'] ?? 'Nome não disponível',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: BottomNavigationBar(
-                      items: const <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.dashboard),
-                          label: 'Dashboard',
+                    const SizedBox(height: 10),
+                    // Nível de acesso
+                    Text(
+                      'Nível de acesso: ${data['accessLevel'] ?? 'N/A'}',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Status
+                    Text(
+                      'Status: ${data['status'] ?? 'N/A'}',
+                      style: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    // Botões
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.armyGreen,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                          icon: const Icon(Icons.check),
+                          label: const Text('Confirmar Check-in'),
+                          onPressed: _isCheckingIn ? null : _confirmCheckIn,
                         ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.assessment),
-                          label: 'Relatórios',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.account_circle),
-                          label: 'Meu Perfil',
+                        const SizedBox(width: 20),
+                        OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Colors.red),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                          icon: const Icon(Icons.cancel),
+                          label: const Text('Cancelar'),
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
-                      currentIndex: 0,
-                      selectedItemColor: AppColors.lightGreen,
-                      unselectedItemColor: Colors.white54,
-                      backgroundColor: Colors.transparent,
-                      type: BottomNavigationBarType.fixed,
-                      elevation: 0,
-                      onTap: (index) {
-                        if (index == 0) {
-                          Navigator.of(context).pop();
-                        }
-                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
