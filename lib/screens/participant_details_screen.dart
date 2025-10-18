@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class ParticipantDetailsScreen extends StatefulWidget {
   final Map<String, String> participantData;
@@ -104,7 +105,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                   child: const Text(
                     'OK',
                     style: TextStyle(
-                      color: Colors.cyan,
+                      color: AppColors.lightGreen,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -137,7 +138,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/imagcapa.jpeg'),
+            image: AssetImage('assets/images/img-principal.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -147,8 +148,8 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
               ],
             ),
           ),
@@ -303,10 +304,10 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.cyan.withOpacity(0.2),
+                            color: AppColors.lightGreen.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Colors.cyan.withOpacity(0.5),
+                              color: AppColors.lightGreen.withOpacity(0.5),
                               width: 1,
                             ),
                           ),
@@ -314,7 +315,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                             children: [
                               const Icon(
                                 Icons.event,
-                                color: Colors.cyan,
+                                color: AppColors.lightGreen,
                                 size: 18,
                               ),
                               const SizedBox(width: 8),
@@ -497,7 +498,7 @@ class _ParticipantDetailsScreenState extends State<ParticipantDetailsScreen>
                         ),
                       ],
                       currentIndex: 0,
-                      selectedItemColor: Colors.cyan,
+                      selectedItemColor: AppColors.lightGreen,
                       unselectedItemColor: Colors.white54,
                       backgroundColor: Colors.transparent,
                       type: BottomNavigationBarType.fixed,
