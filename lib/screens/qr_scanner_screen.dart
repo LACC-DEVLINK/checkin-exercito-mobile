@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'awaiting_authorization_screen.dart';
+import 'participant_details_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -66,26 +66,166 @@ class _QRScannerScreenState extends State<QRScannerScreen>
       final barcode = barcodes.first;
       final qrData = barcode.rawValue ?? '';
 
-      // Criar dados do participante baseado no QR Code escaneado
+      // Simular dados do participante (substitua por dados reais se houver integração)
       final scannedData = {
         'qrCode': qrData,
         'participantId': qrData.isNotEmpty ? qrData : '12345',
-        'name': 'Rafael Lindo',
-        'event': 'Evento Militar - FortAccess',
-        'scanTime': DateTime.now().toString(),
+        'name': 'Militar Exemplo',
+        'photo': 'assets/images/logo-do-app.png', // Substitua por foto real se disponível
+        'accessLevel': 'Autorizado',
+        'status': 'Apto para entrada',
       };
 
-      // Navegar para tela de aguardando autorização
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              AwaitingAuthorizationScreen(scannedData: scannedData),
-        ),
-      ).then((_) {
-        // Quando voltar, reiniciar o scanner
-        _restartScan();
-      });
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.85),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'DETALHES DO PARTICIPANTE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      letterSpacing: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  // Foto 3x4 com borda verde arredondada
+                  Container(
+                    width: 100,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.lightGreen,
+                        width: 3,
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(9),
+                      child: Image.asset(
+                        scannedData['photo']!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  // Nome em negrito
+                  Text(
+                    scannedData['name'] ?? '',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Nível de acesso
+                  Text(
+                    'Nível de Acesso: ${scannedData['accessLevel'] ?? ''}',
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Status com ícone
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Status: ',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'CHECK-IN REALIZADO',
+                        style: TextStyle(
+                          color: AppColors.lightGreen,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(Icons.check_circle, color: AppColors.lightGreen, size: 20),
+                    ],
+                  ),
+                  const SizedBox(height: 28),
+                  // Botão de confirmação
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.lightGreen,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _restartScan();
+                        // Lógica de registro de check-in
+                      },
+                      child: const Text('CONFIRMAR CHECK-IN'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Botão cancelar
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey.shade600,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
+                        ),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _restartScan();
+                      },
+                      child: const Text('CANCELAR'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
     }
   }
 
